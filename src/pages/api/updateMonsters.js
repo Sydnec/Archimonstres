@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Méthode non autorisée" });
   }
 
-  const pseudo = process.env.NEXT_PUBLIC_METAMOB_PSEUDO;
+  const pseudo = process.env.METAMOB_PSEUDO;
   const API_BASE_URL = "https://api.metamob.fr";
   const url = `${API_BASE_URL}/utilisateurs/${pseudo}/monstres`;
 
@@ -13,8 +13,8 @@ export default async function handler(req, res) {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
-        "HTTP-X-APIKEY": process.env.NEXT_PUBLIC_METAMOB_API_KEY,
-        "HTTP-X-USERKEY": process.env.NEXT_PUBLIC_METAMOB_USER_KEY,
+        "HTTP-X-APIKEY": process.env.METAMOB_API_KEY,
+        "HTTP-X-USERKEY": process.env.METAMOB_USER_KEY,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(req.body),
