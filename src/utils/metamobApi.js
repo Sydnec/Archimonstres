@@ -2,14 +2,14 @@ const API_BASE_URL = 'https://api.metamob.fr';
 
 export async function fetchMonsters() {
     try {
-        const pseudo = process.env.NEXT_PUBLIC_METAMOB_PSEUDO;
+        const pseudo = process.env.METAMOB_PSEUDO;
         const url = `${API_BASE_URL}/utilisateurs/${pseudo}/monstres`;
 
         console.log(`🔍 Récupération des monstres pour ${pseudo}...`);
 
         const response = await fetch(url, {
             headers: {
-                'HTTP-X-APIKEY': process.env.NEXT_PUBLIC_METAMOB_API_KEY,
+                'HTTP-X-APIKEY': process.env.METAMOB_API_KEY,
             },
         });
 
