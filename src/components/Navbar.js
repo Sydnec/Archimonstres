@@ -17,6 +17,9 @@ export default function Navbar() {
                 <li>
                     <Link href="/communaute">Communauté</Link>
                 </li>
+                <li>
+                    <Link href="/api-keys">Clef API</Link>
+                </li>
             </ul>
         </nav>
     );

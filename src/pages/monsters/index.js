@@ -1,31 +1,42 @@
+import { useState, useEffect } from "react";
 import MonsterList from "@/components/MonsterList";
 import { fetchMonsters } from "@/utils/metamobApi";
 
-export async function getServerSideProps() {
-  try {
-    const monsters = await fetchMonsters();
+export default function MonstersPage() {
+  const [monsters, setMonsters] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    // ⚡ Réduire les données envoyées au client
-    const optimizedMonsters = monsters.map((monster) => ({
-      id: monster.id,
-      nom: monster.nom,
-      image_url: monster.image_url,
-      etape: monster.etape,
-      quantite: monster.quantite || 0,
-      type: monster.type,
-    }));
+  useEffect(() => {
+    const pseudo = localStorage.getItem("pseudo");
+    const apiKey = localStorage.getItem("apiKey");
 
-    return { props: { monsters: optimizedMonsters } };
-  } catch (error) {
-    console.error("Erreur lors de la récupération des monstres :", error);
-    return { props: { monsters: [] } };
-  }
-}
+    if (!pseudo || !apiKey) {
+      console.error("Pseudo et Clé API requis.");
+      setLoading(false);
+      return;
+    }
 
-export default function MonstersPage({ monsters }) {
+    fetchMonsters(pseudo, apiKey)
+      .then((data) => {
+        const optimizedMonsters = data.map((monster) => ({
+          id: monster.id,
+          nom: monster.nom,
+          image_url: monster.image_url,
+          etape: monster.etape,
+          quantite: monster.quantite || 0,
+          type: monster.type,
+        }));
+        setMonsters(optimizedMonsters);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des monstres :", error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="monsters-container">
-      {monsters.length > 0 ? <MonsterList monsters={monsters} /> : <p>Aucun monstre trouvé.</p>}
+      {loading ? <p>Chargement...</p> : monsters.length > 0 ? <MonsterList monsters={monsters} /> : <p>Aucun monstre trouvé.</p>}
     </div>
   );
 }
